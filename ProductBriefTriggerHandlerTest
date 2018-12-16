@@ -1,0 +1,47 @@
+/**
+   @author Original: Justyna F 
+   @date Original: 12 Dec 2018
+   @description Class to test ProductBriefTriggerHandler class
+*/
+
+@isTest
+public class ProductBriefTriggerHandlerTest {
+    
+    //create User
+    //create Opportunity 
+    //create ProductBrief to create Product Share from
+    
+    
+    //method to create Project___c for Product Brief:
+    public static Project__c createProject() {
+        return new Project__c(
+            
+        );
+    }
+    
+    //method to query Project Share for Product Brief
+    
+    public static List<Project__Share> fetchProjectShares(Set<Id> Projectids) {
+        return [
+            SELECT Id, ParentId, UserOrGroupId, AccessLevel
+            FROM Project__Share
+            WHERE ParentId in :ProjectIds
+        ];
+    }
+    
+    public static testmethod onAfterInsertTest(){
+        User creator = createUser();
+        Product_Brief__c pB = createProductBrief();
+        createProject();
+        Test.startTest();
+        insert creator;
+        insert opportunity;
+        insert project;
+        insert pB;
+        Test.stopTest();
+        List<Project__Share> queriedProjectShares = fetchProjectShares(projectIdSet);
+        System.assertEquals(1, queriedProjectShares.size());
+        
+    }
+
+}
